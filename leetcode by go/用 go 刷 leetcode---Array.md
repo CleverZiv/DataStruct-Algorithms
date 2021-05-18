@@ -23,3 +23,22 @@ func twoSum(nums []int, target int) []int {
 }
 ```
 
+## 2、寻找两个正序数组的中位数（4）
+
+用于分析的测试用例：
+
+```go
+// 奇数
+nums1 := []int {2,4,6,7}
+nums2 := []int {1,3,4,8,9}
+// 偶数
+nums1 := []int {2,4,6,7，10}
+nums2 := []int {1,3,4,8,9}
+// nums1 过小，中位数的左边在 nums2
+nums1 := []int {1}
+nums2 := []int {2,3,4}
+// nums1 过大，中位数右边在 nums2
+nums1 := []int{5}
+nums2 := []int{1,2}
+```
+
