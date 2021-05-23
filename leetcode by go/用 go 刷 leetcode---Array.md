@@ -8,7 +8,7 @@
 
 顺序扫描数组，对每一个元素，在 map 中找能组合给定值的另一半数字，如果找到了，直接返回 2 个数字的下标即可。如果找不到，就把这个数字存入 map 中，等待扫到“另一半”数字的时候，再取出来返回结果。
 
-```go
+```
 func twoSum(nums []int, target int) []int {
     map1 := make(map[int]int)
     for i1, v := range nums {
@@ -27,7 +27,7 @@ func twoSum(nums []int, target int) []int {
 
 用于分析的测试用例：
 
-```go
+```
 // 奇数
 nums1 := []int {2,4,6,7}
 nums2 := []int {1,3,4,8,9}
@@ -46,10 +46,8 @@ nums2 := []int{1,2}
 
 首尾各一个指针，计算当前能盛多少水
 
-* 计算规则：
-指针下标的差 * 首尾指针所指高度矮的
-* 指针移动规则：
-哪边小，就移动哪边
+- 计算规则： 指针下标的差 * 首尾指针所指高度矮的
+- 指针移动规则： 哪边小，就移动哪边
 
 ## 4、3Sum
 
@@ -62,7 +60,7 @@ nums2 := []int{1,2}
 
 解答如下：
 
-```go
+```
 // 返回所有值的组合，并且不能重复
 func TwoSum2(nums []int, target int) [][]int {
 	// 先排序
@@ -93,7 +91,7 @@ func TwoSum2(nums []int, target int) [][]int {
 
 但是为了使得返回的组合不重复，我们需要比较每次选定的数的与前一个数的大小关系，如果相同则跳过（该逻辑在上面的 TwoSum2 已经实现，详见注释），代码如下：
 
-```go
+```
 func threeSum(nums []int, target int) [][]int {
 	// 先排序
 	sort.Ints(nums)
@@ -119,7 +117,7 @@ func threeSum(nums []int, target int) [][]int {
 
 接下来继续，4Sum，和 3Sum 一样：
 
-```go
+```
 func fourSum(nums []int, target int) [][]int {
 	sort.Ints(nums)
 	low := 0
@@ -200,6 +198,32 @@ func TwoSumCloseSet(nums []int, target int) int {
 		}
 	}
 	return res
+}
+```
+
+## 6、移除数组中重复的数字（26）
+
+使用双指针法：
+
+- p 指针永远指向新数组的最后一位，0~p范围内的数字组成新数组
+- q 指针用于遍历旧数组
+
+```go
+func removeDuplicates(nums []int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	p, q := 0, 0
+	for q < len(nums)-1 {
+		if nums[q] == nums[q+1] {
+			q++
+		} else {
+			nums[p+1] = nums[q+1]
+			p++
+			q++
+		}
+	}
+	return p + 1
 }
 ```
 
