@@ -243,4 +243,45 @@ func reverse(nums *[]int, i, j int) {
 	}
 }
 ```
+## 7、搜索旋转排序数组（33）
+利用二分法，实际题目中已经提示时间复杂度不超过 O(logn)
+要注意：
+- 判断处于大区间还是小区间，如何判断呢？利用 nums[mid]和num[low]、nums[high]的关系
+- 一些边界值的处理，不要忘记“=”
+- 最后的 else 逻辑必不可少，否则程序会陷入死循环
 
+```go
+func search(nums []int, target int) int {
+	// 利用二分搜索，每次二分后判断在哪个区间内
+	low, high, mid := 0, len(nums)-1, 0
+	for low <= high {
+		mid = low + (high-low)>>1
+		if nums[mid] == target {
+			return mid
+		} else if nums[mid] > nums[low] {
+			// 在左边的大区间内
+			if nums[mid] > target && nums[low] <= target {
+				high = mid - 1
+			} else {
+				low = mid + 1
+			}
+
+		} else if nums[mid] < nums[high] {
+			// 在右边的小区间内
+			if nums[mid] < target && nums[high] >= target {
+				low = mid + 1
+			} else {
+				high = mid - 1
+			}
+		}else { // 必不可少，当 target 在数组中不存在时，这里的逻辑可以使循环跳出
+			if nums[low] == nums[mid] {
+				low++
+			}
+			if nums[high] == nums[mid] {
+				high--
+			}
+		}
+	}
+	return -1
+}
+```
