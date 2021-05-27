@@ -285,3 +285,129 @@ func search(nums []int, target int) int {
 	return -1
 }
 ```
+## 8、总结所有二分搜索形式（34）
+```go
+package goleetcode
+
+import "testing"
+
+func TestBinarySearch(t *testing.T) {
+	nums := []int{5, 7, 7, 7,7,7,8, 8, 10}
+	t.Log(searchRange(nums, 7))
+}
+
+/**
+二分搜索：
+nums 升序排列；无重复元素
+*/
+func binarySearch(nums []int, target int) int {
+	low, high := 0, len(nums)-1
+	for low <= high {
+		mid := low + (high-low)>>1
+		if nums[mid] > target {
+			high = mid - 1
+		} else if nums[mid] < target {
+			low = mid + 1
+		} else {
+			return mid
+		}
+	}
+	return -1
+}
+
+/**
+二分搜索：
+升序；有重复元素
+求第一个等于target的元素的下标
+*/
+func binarySearchFirstEqual(nums []int, target int) int {
+	low, high := 0, len(nums)-1
+	for low <= high {
+		mid := low + (high-low)>>1
+		if nums[mid] > target {
+			high = mid - 1
+		} else if nums[mid] < target {
+			low = mid + 1
+		} else {
+			// 等于时，如果 nums[mid-1] != target，表明已经是最左边等于 target 的数了
+			if mid == 0 || nums[mid-1] != target {
+				return mid
+			}
+			high = mid - 1
+		}
+	}
+	return -1
+}
+
+/**
+二分搜索：
+升序；有重复元素
+求最后等于target的元素的下标
+*/
+func binarySearchLastEqual(nums []int, target int) int {
+	low, high := 0, len(nums)-1
+	for low <= high {
+		mid := low + (high-low)>>1
+		if nums[mid] > target {
+			high = mid - 1
+		} else if nums[mid] < target {
+			low = mid + 1
+		} else {
+			// 等于时，如果 nums[mid+1] != target，表明已经是最左边等于 target 的数了
+			if mid == len(nums)-1 || nums[mid+1] != target {
+				return mid
+			}
+			low = mid + 1
+		}
+	}
+	return -1
+}
+
+/**
+找到第一个大于等于 target 的元素
+ */
+func binarySearchFirstGreater(nums []int, target int) int {
+	low, high := 0, len(nums)-1
+	for low <= high {
+		mid := low + (high-low)>>1
+		if nums[mid] >= target {
+			if mid == 0 || nums[mid-1] < target {
+				return mid
+			}
+			high = mid - 1
+		} else {
+			low = mid + 1
+		}
+	}
+	return -1
+}
+
+/**
+找到最后一个小于等于 target 的元素
+*/
+func binarySearchFirstSmaller(nums []int, target int) int {
+	low, high := 0, len(nums)-1
+	for low <= high {
+		mid := low + (high-low)>>1
+		if nums[mid] > target {
+			high = mid - 1
+		} else {
+			if mid == len(nums)-1 || nums[mid+1] > target {
+				return mid
+			}
+			low = mid + 1
+		}
+	}
+	return -1
+}
+
+/**
+找到目标元素在数组中的开始位置和结束位置
+ */
+
+func searchRange(nums []int, target int) []int {
+	start := binarySearchFirstEqual(nums, target)
+	end := binarySearchLastEqual(nums, target)
+	return []int{start, end}
+}
+```
