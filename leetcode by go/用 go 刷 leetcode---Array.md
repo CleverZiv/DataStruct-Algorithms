@@ -411,3 +411,26 @@ func searchRange(nums []int, target int) []int {
 	return []int{start, end}
 }
 ```
+## 9、搜索下一个位置（35）
+```go
+func searchInsert(nums []int, target int) int {
+	low, high := 0, len(nums)
+	for low <= high {
+		mid := low + (high-low) >> 1
+		if nums[mid] > target {
+			high = mid-1
+		}else if nums[mid] < target {
+            // 小于时先判断是否是最大的比 target 小的数，这里要注意 mid == len(nums)-1 的特殊情况
+			if mid == len(nums)-1 || nums[mid+1] > target {
+				return mid+1
+			} else {
+				low = mid + 1
+			}
+		}else {
+            // 等于则直接返回
+			return mid
+		}
+	}
+	return 0
+}
+```
