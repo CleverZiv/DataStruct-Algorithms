@@ -456,3 +456,54 @@ func maxSubArray(nums []int) int {
 	return res
 }
 ```
+## 11、组合综合（39）-- 回溯法
+回溯法的套路：
+```go
+result = []
+def backtrack(路径, 选择列表):
+    if 满足结束条件:
+        result.add(路径)
+        return
+    
+    for 选择 in 选择列表:
+        做选择
+        backtrack(路径, 选择列表)
+        撤销选择
+```
+```go
+func combinationSum(candidates []int, target int) [][]int {
+	if len(candidates) == 0 {
+		return [][]int{}
+	}
+	path, res := []int{}, [][]int{}
+	sort.Ints(candidates)
+	helper(candidates, target, 0, path, &res)
+	return res
+}
+
+func helper(candidates []int, target int, begin int, path []int, res *[][]int) {
+	if target < 0 {
+		return
+	}
+	if target == 0 {
+		b := make([]int, len(path))
+		copy(b, path)
+		*res = append(*res, b)
+	}
+	// 选择 in 选择列表
+	for i := begin; i < len(candidates);i++{
+		if candidates[begin] > target {
+			// 剪枝优化，这里要求原始数组是有序的。否则 如{2,5,3}，假如此时path为{5},begin=1,target=3,此时会将
+			// candidates[1]=5>3，会将其剪掉，但实际上{5,3}是满足的，原因就在于没有升序排列，导致将后面更小的可以组成
+			// target 的值给剪掉了
+			break
+		}
+		// 做选择
+		path = append(path, candidates[i])
+		// 回溯方法主体（选择列表，路径）
+		helper(candidates, target-candidates[i], i, path, res)
+		// 撤销选择
+		path = path[:len(path)-1]
+	}
+}
+```
