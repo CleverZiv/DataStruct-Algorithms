@@ -507,3 +507,46 @@ func helper(candidates []int, target int, begin int, path []int, res *[][]int) {
 	}
 }
 ```
+## 12、组合2
+在两处增加去重的逻辑
+```go
+func combinationSum2(candidates []int, target int) [][]int {
+	if len(candidates) == 0 {
+		return [][]int{}
+	}
+	path, res := []int{}, [][]int{}
+	sort.Ints(candidates)
+	helper2(candidates, target, 0, path, &res)
+	return res
+}
+
+func helper2(candidates []int, target int, begin int, path []int, res *[][]int) {
+	if target < 0 {
+		return
+	}
+	if target == 0 {
+		b := make([]int, len(path))
+		copy(b, path)
+		*res = append(*res, b)
+		return
+	}
+	// 选择 in 选择列表
+	for i := begin; i < len(candidates); i++ {
+		if i > begin && candidates[i-1] == candidates[i] { // 去重，当本次与上次的值一样时，不取，忽略i==begin时的情况
+			continue
+		}
+		if candidates[i] > target {
+			// 剪枝优化，这里要求原始数组是有序的。否则 如{2,5,3}，假如此时path为{5},begin=1,target=3,此时会将
+			// candidates[1]=5>3，会将其剪掉，但实际上{5,3}是满足的，原因就在于没有升序排列，导致将后面更小的可以组成
+			// target 的值给剪掉了
+			break
+		}
+		// 做选择
+		path = append(path, candidates[i])
+		// 回溯方法主体（选择列表，路径）
+		helper2(candidates, target-candidates[i], i+1, path, res) // 去重，下次取数从 i+1 开始
+		// 撤销选择
+		path = path[:len(path)-1]
+	}
+}
+```
