@@ -550,3 +550,20 @@ func helper2(candidates []int, target int, begin int, path []int, res *[][]int) 
 	}
 }
 ```
+## 13、首个缺失的正整数（41）
+1. 缺失的正整数在给定的数的中间时，利用 map 找到
+2. 缺失的正整数在给定的数右边时，直接返回 数组长度+1 的方式找到
+```go
+func firstMissingPositive(nums []int) int {
+	tempMap := make(map[int]int)
+	for _, num := range nums {
+		tempMap[num] = 1
+	}
+	for i := 1; i < len(tempMap)+1; i++ { // 要稍大于给定的数组元素
+		if _, ok := tempMap[i]; !ok  {
+			return i
+		}
+	}
+	return len(tempMap)+1 // 缺失的为数组中最大元素的下一个
+}
+```
