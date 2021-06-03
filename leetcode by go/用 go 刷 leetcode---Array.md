@@ -567,3 +567,55 @@ func firstMissingPositive(nums []int) int {
 	return len(tempMap)+1 // 缺失的为数组中最大元素的下一个
 }
 ```
+## ☆14、接雨水（42）
+关键是想清楚，怎么去计算这个值呢？
+思路1：找到每一个位置的左右两边的最大值，用较小值乘以两者的间距，然后再减去两者之间存在的高度
+思路2：找到每一个位置的左右两边的最大值，仅仅以着眼于该位置，计算该位置能盛多少水：最大值的较小值-当前位置的高度
+思路2的计算方法更简单，只需要事先维护好每个位置的左边最大值和右边最大值。
+```go
+func trap(height []int) (ans int) {
+	n := len(height)
+	if n == 0 {
+		return
+	}
+
+	leftMax := make([]int, n)
+	leftMax[0] = height[0]
+	// 求左右两边的最大值，都需要把自己包含进去
+	for i := 1; i < n; i++ {
+		leftMax[i] = max(leftMax[i-1], height[i])
+	}
+
+	rightMax := make([]int, n)
+	rightMax[n-1] = height[n-1]
+	for i := n - 2; i >= 0; i-- {
+		rightMax[i] = max(rightMax[i+1], height[i])
+	}
+
+	for i, h := range height {
+		// 计算的是每个位置能装多少水，左右两边最大值中的较小值，再减去本身的高度
+		ans += min(leftMax[i], rightMax[i]) - h
+	}
+	return
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+```
+
+
+
+
+
