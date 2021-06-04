@@ -1,4 +1,4 @@
-# 用 go 刷 leetcode---Array
+# 用 go 刷 leetcode---Array（一）
 
 ## 1 Two Sum
 
