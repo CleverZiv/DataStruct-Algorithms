@@ -51,3 +51,27 @@ func jump2(nums []int) int {
 2. end 需要更新，即为 maxPosition
 
 如当前第1步能跳到最远的点是 2，即 end = 2，而下一步能到达的最远的点，需要再这个范围内计算，最后计算得到当 i = 1时，可以取得 maxPosition 的最大值 4
+## 3、顺时针翻转（48）
+顺时针翻转可以分解为两步：
+1. 先对角线翻转
+2. 以行的维度上下对换（以中间的一行为轴做轴对称变换）
+
+```go
+package leetcode
+
+func rotate(matrix [][]int) {
+	length := len(matrix)
+	// rotate by diagonal 对角线变换
+	for i := 0; i < length; i++ {
+		for j := i + 1; j < length; j++ {
+			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+		}
+	}
+	// rotate by vertical centerline 竖直轴对称翻转
+	for i := 0; i < length; i++ {
+		for j := 0; j < length/2; j++ {
+			matrix[i][j], matrix[i][length-j-1] = matrix[i][length-j-1], matrix[i][j]
+		}
+	}
+}
+```
